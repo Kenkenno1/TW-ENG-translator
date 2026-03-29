@@ -1075,6 +1075,7 @@
       const ttsAc = new AbortController();
       state.ttsController = ttsAc;
 
+      /* [HD TTS disabled] — 取消註解以下區塊即可恢復 HD 音質播放
       // Check if HD audio is cached for this exact text
       if (state.hdCache && state.hdCache.text === text && state.hdCache.lang === lang && state.hdCache.audio) {
         try {
@@ -1084,7 +1085,6 @@
           audio.onended = onDone;
           audio.onerror = onDone;
           await audio.play();
-          // Use actual audio duration for timeout (more accurate than character estimate)
           const hdTimeout = (isFinite(audio.duration) ? audio.duration * 1000 : dynamicTimeout) + 5000;
           state.ttsTimeout = setTimeout(() => {
             if (state.speaking && state.speakingTarget === target) stopSpeaking();
@@ -1092,23 +1092,21 @@
           return;
         } catch {
           state.audioEl = null;
-          // Fall through to browser TTS
         }
       }
+      [/HD TTS disabled] */
 
-      // First play: use browser TTS (instant), preload HD in background
+      // Browser TTS
       if ('speechSynthesis' in window) {
         try {
           const u = speakLocal(text, cfg.localLang);
           startSafetyTimer(3); // 3x buffer — onend handles normal completion
           u.onend = u.onerror = onDone;
-          // Start HD preload in background (won't interrupt current playback)
-          preloadHD(text, lang);
           return;
         } catch { /* fall through */ }
       }
 
-      // Fallback: try cloud TTS directly if no browser TTS
+      /* [HD TTS disabled] — 取消註解以下區塊即可恢復 cloud TTS fallback
       if (state.apiKey) {
         try {
           const audio = await speakCloud(text, ttsAc.signal);
@@ -1128,6 +1126,7 @@
           if (ttsAc.signal.aborted) return;
         }
       }
+      [/HD TTS disabled] */
 
       onDone();
     }
@@ -1719,8 +1718,7 @@ Return ONLY the improved translation. No explanations, no notes.`;
             el.btnSpeakOut.classList.remove('speak-ready');
             void el.btnSpeakOut.offsetWidth; // force reflow for re-trigger
             el.btnSpeakOut.classList.add('speak-ready');
-            const tgtLang = getTgtLang();
-            preloadHD(el.out.textContent, tgtLang);
+            // [HD TTS disabled] preloadHD(el.out.textContent, getTgtLang());
           } else {
             toggleSpeak('out');
           }
