@@ -1080,7 +1080,6 @@
       const ttsAc = new AbortController();
       state.ttsController = ttsAc;
 
-      /* [HD TTS disabled] — 取消註解以下區塊即可恢復 HD 音質播放
       // Check if HD audio is cached for this exact text
       if (state.hdCache && state.hdCache.text === text && state.hdCache.lang === lang && state.hdCache.audio) {
         try {
@@ -1099,7 +1098,6 @@
           state.audioEl = null;
         }
       }
-      [/HD TTS disabled] */
 
       // Browser TTS
       if ('speechSynthesis' in window) {
@@ -1111,7 +1109,6 @@
         } catch { /* fall through */ }
       }
 
-      /* [HD TTS disabled] — 取消註解以下區塊即可恢復 cloud TTS fallback
       if (state.apiKey) {
         try {
           const audio = await speakCloud(text, ttsAc.signal);
@@ -1131,7 +1128,6 @@
           if (ttsAc.signal.aborted) return;
         }
       }
-      [/HD TTS disabled] */
 
       onDone();
     }
@@ -1733,7 +1729,7 @@ Return ONLY the improved translation. No explanations, no notes.`;
             el.btnSpeakOut.classList.remove('speak-ready');
             void el.btnSpeakOut.offsetWidth; // force reflow for re-trigger
             el.btnSpeakOut.classList.add('speak-ready');
-            // [HD TTS disabled] preloadHD(el.out.textContent, getTgtLang());
+            preloadHD(el.out.textContent, getTgtLang());
           } else {
             toggleSpeak('out');
           }
