@@ -1,0 +1,12 @@
+{
+  "seed": 81010,
+  "html": [
+    "index.html",
+    "to_Eng.html"
+  ],
+  "copy": [
+    "icon-180.svg",
+    "icon-180.png",
+    "en_icon.png"
+  ]
+}
