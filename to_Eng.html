@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>任何語言 → English</title>
+    <title>Any Language → English</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -27,6 +27,7 @@
             --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { max-width: 100%; overflow-x: hidden; }
         body {
             font-family: 'Ubuntu', 'Noto Sans TC', sans-serif;
             background-color: var(--washi);
@@ -92,11 +93,11 @@
         }
         @media (max-width: 900px) { .control-panel { grid-template-columns: 1fr; gap: 16px; } }
         @media (max-width: 480px) {
-            .header { padding: 12px 14px; }
-            .brand-group { gap: 10px; }
+            .header { padding: 12px 14px; flex-wrap: wrap; gap: 12px; }
+            .brand-group { gap: 10px; min-width: 0; flex: 1 1 100%; }
             .brand-badge svg { width: 38px; height: 38px; }
-            .brand-mark { font-size: 1.4rem; letter-spacing: 0.5px; }
-            .header-actions { gap: 8px; }
+            .brand-mark { font-size: 1.4rem; letter-spacing: 0.5px; white-space: normal; line-height: 1.15; }
+            .header-actions { width: 100%; gap: 8px; justify-content: flex-end; }
             .guide-btn { padding: 7px 11px; font-size: 0.72rem; letter-spacing: 0; }
             .menu-btn { width: 42px; height: 42px; }
         }
@@ -583,7 +584,7 @@
     <div class="header">
         <div class="brand-group">
             <span class="brand-badge">
-                <svg viewBox="0 0 48 48" width="46" height="46" role="img" aria-label="翻譯工具標誌">
+                <svg viewBox="0 0 48 48" width="46" height="46" role="img" aria-label="Translation tool logo">
                     <circle cx="24" cy="24" r="24" fill="#E8A21C"/>
                     <g fill="#ffffff">
                         <circle cx="14.2" cy="15.2" r="6.4"/>
@@ -604,11 +605,11 @@
                 </svg>
             </span>
             <div class="brand-text">
-                <h1 class="brand-mark">任何語言 → English</h1>
+                <h1 class="brand-mark">Any Language → English</h1>
             </div>
         </div>
         <div class="header-actions">
-            <button class="guide-btn" onclick="UI.showGuide()">使用教學</button>
+            <button class="guide-btn" onclick="UI.showGuide()">How to Use</button>
             <button class="menu-btn" onclick="UI.toggleDrawer()">
                 <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
             </button>
@@ -617,7 +618,7 @@
     <div class="control-panel">
         <div class="file-input-wrapper">
             <input type="file" id="fileInput" accept=".pptx,.docx,.xlsx,.txt">
-            <span class="file-label" id="fileName">📎 上傳檔案</span>
+            <span class="file-label" id="fileName">📎 Upload File</span>
         </div>
         <!-- v8.0.2-auto: 來源自動偵測、譯文鎖定 English；選單保留於 DOM 供下游 .value 讀取，但不顯示、不可改 -->
         <div class="lang-group" style="display:none;">
@@ -625,22 +626,22 @@
             <select class="lang-select" id="targetLang"></select>
         </div>
         <div class="action-group" style="grid-template-columns: repeat(2, 1fr);">
-            <button class="action-btn" id="btnTrans" onclick="ENGINE.rerunFullPipeline()" disabled><span class="btn-label">重新翻譯</span></button>
-            <button class="action-btn" id="btnPolish" onclick="ENGINE.polish()" disabled style="display:none;"><span class="btn-label">潤稿</span></button>
-            <button class="action-btn" id="btnDown" onclick="ENGINE.download()" disabled><span class="btn-label">下載</span></button>
+            <button class="action-btn" id="btnTrans" onclick="ENGINE.rerunFullPipeline()" disabled><span class="btn-label">Translate Again</span></button>
+            <button class="action-btn" id="btnPolish" onclick="ENGINE.polish()" disabled style="display:none;"><span class="btn-label">Polish</span></button>
+            <button class="action-btn" id="btnDown" onclick="ENGINE.download()" disabled><span class="btn-label">Download</span></button>
         </div>
     </div>
     <div class="preview-container">
         <div class="preview-header">
-            <span class="preview-title">預覽</span>
+            <span class="preview-title">Preview</span>
             <span class="stat-badge" id="segCount">0</span>
         </div>
-        <div class="preview-list" id="previewList"><div style="text-align:center; padding: 40px; color: var(--kin);">📎 選擇檔案後自動解析</div></div>
+        <div class="preview-list" id="previewList"><div style="text-align:center; padding: 40px; color: var(--kin);">📎 Select a file to parse it automatically</div></div>
     </div>
 </div>
 <div class="first-run-overlay" id="firstRunOverlay" aria-hidden="true">
     <div class="first-run-card" role="dialog" aria-modal="true" aria-labelledby="firstRunTitle">
-        <button class="first-run-skip" type="button" aria-label="略過導覽，直接使用完整介面" onclick="FIRST_RUN.hide()">×</button>
+        <button class="first-run-skip" type="button" aria-label="Skip the guide and open the full interface" onclick="FIRST_RUN.hide()">×</button>
         <div class="first-run-badge" aria-hidden="true">
             <svg viewBox="0 0 48 48" width="62" height="62">
                 <circle cx="24" cy="24" r="24" fill="#E8A21C"/>
@@ -664,47 +665,47 @@
         </div>
 
         <section class="first-run-stage active" data-stage="upload">
-            <h2 class="first-run-title" id="firstRunTitle">上傳檔案 → English</h2>
+            <h2 class="first-run-title" id="firstRunTitle">Any Language → English</h2>
             <label class="first-run-upload" for="fileInput">
-                <strong>📎 選擇檔案</strong>
-                <span>支援 pptx / docx / xlsx / txt</span>
+                <strong>📎 Choose a File</strong>
+                <span>Supports pptx / docx / xlsx / txt</span>
             </label>
         </section>
 
         <section class="first-run-stage" data-stage="key">
-            <h2 class="first-run-title">貼上 Gemini API Key</h2>
-            <p class="first-run-copy">檔案已解析完成。第一次翻譯前需要 API Key，之後會記住在這台瀏覽器。</p>
+            <h2 class="first-run-title">Enter Your Gemini API Key</h2>
+            <p class="first-run-copy">Your API key is stored only in this browser for future translations.</p>
             <input class="first-run-input" id="firstRunApiKey" type="password" placeholder="Google Gemini API Key">
-            <div class="first-run-error" id="firstRunKeyError" style="display:none;">請先貼上 API Key。</div>
+            <div class="first-run-error" id="firstRunKeyError" style="display:none;">Enter an API key to continue.</div>
             <div class="first-run-actions">
-                <button class="first-run-primary" type="button" onclick="FIRST_RUN.saveKeyAndContinue()">繼續</button>
+                <button class="first-run-primary" type="button" onclick="FIRST_RUN.saveKeyAndContinue()">Continue</button>
             </div>
-            <a class="first-run-key-link" href="https://aistudio.google.com/app/apikey" target="_blank">沒有 Key？前往申請</a>
+            <a class="first-run-key-link" href="https://aistudio.google.com/app/apikey" target="_blank">Need a key? Create one</a>
         </section>
 
         <!-- v8.0.0-auto: 語言鎖定，language stage 移除；上傳（+首次 Key）後直接進 progress -->
-        <section class="first-run-stage" data-stage="progress" aria-label="翻譯與下載進行中">
+        <section class="first-run-stage" data-stage="progress" aria-label="Translation and download in progress">
             <div class="first-run-progress-visual">
                 <div class="first-run-spinner"></div>
-                <h2 class="first-run-progress-label">正在翻譯</h2>
-                <div class="first-run-progress-count" aria-live="polite" hidden>0 / 0 段</div>
-                <p class="first-run-progress-quip" aria-live="polite">我正在把原文翻成目標語言，不是把人生翻成容易。</p>
-                <button class="first-run-secondary" type="button" data-first-run-stop onclick="FIRST_RUN.cancelProcessing()">停止</button>
+                <h2 class="first-run-progress-label">Translating</h2>
+                <div class="first-run-progress-count" aria-live="polite" hidden>0 / 0</div>
+                <p class="first-run-progress-quip" aria-live="polite">Turning your document into clear English.</p>
+                <button class="first-run-secondary" type="button" data-first-run-stop onclick="FIRST_RUN.cancelProcessing()">Stop</button>
             </div>
         </section>
 
         <section class="first-run-stage" data-stage="done">
             <div class="first-run-done" aria-hidden="true">✓</div>
-            <h2 class="first-run-title">大功告成</h2>
-            <p class="first-run-copy">譯文已下載，辛苦了。</p>
+            <h2 class="first-run-title">All Done</h2>
+            <p class="first-run-copy">Your translated file has been downloaded.</p>
         </section>
 
         <section class="first-run-stage" data-stage="error">
-            <h2 class="first-run-title">這一步沒有完成</h2>
-            <div class="first-run-error" id="firstRunErrorMsg">請重試一次。</div>
+            <h2 class="first-run-title">This Step Could Not Be Completed</h2>
+            <div class="first-run-error" id="firstRunErrorMsg">Please try again.</div>
             <div class="first-run-actions">
-                <button class="first-run-primary" type="button" onclick="FIRST_RUN.retry()">重試</button>
-                <button class="first-run-secondary" type="button" onclick="FIRST_RUN.openSettings()">開啟設定</button>
+                <button class="first-run-primary" type="button" onclick="FIRST_RUN.retry()">Retry</button>
+                <button class="first-run-secondary" type="button" onclick="FIRST_RUN.openSettings()">Open Settings</button>
             </div>
         </section>
     </div>
@@ -712,7 +713,7 @@
 <div class="drawer-overlay" id="drawerOverlay" onclick="UI.toggleDrawer()"></div>
 <div class="drawer" id="drawer">
     <div class="drawer-header">
-        <h2>設定</h2>
+        <h2>Settings</h2>
         <button onclick="UI.toggleDrawer()" style="background:none; border:none; cursor:pointer; font-size:1.5rem;">×</button>
     </div>
     <div class="drawer-content">
@@ -733,10 +734,10 @@
         <div class="setting-section">
             <label class="section-label">API Key</label>
             <input type="password" id="apiKey" class="input-glass" placeholder="Google Gemini API Key" onchange="ENGINE.saveKey()" oninput="ENGINE.persistKey('gemini')">
-            <div id="apiKeyWarn" style="display:none; font-size:0.75rem; color:#ef4444; margin-top:6px;">⚠ API Key 失效、過期或無權限，請確認後重新輸入</div>
+            <div id="apiKeyWarn" style="display:none; font-size:0.75rem; color:#ef4444; margin-top:6px;">⚠ This API key is invalid, expired, or lacks permission. Please enter a valid key.</div>
             <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:6px;">
-                <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:0.75rem; color:var(--kin-active);">取得 API Key ➜</a>
-                <button type="button" onclick="ENGINE.clearKey('gemini')" style="background:none; border:none; cursor:pointer; font-size:0.75rem; color:var(--sumi-light); text-decoration:underline; padding:0;">清除 API Key</button>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:0.75rem; color:var(--kin-active);">Get an API Key ➜</a>
+                <button type="button" onclick="ENGINE.clearKey('gemini')" style="background:none; border:none; cursor:pointer; font-size:0.75rem; color:var(--sumi-light); text-decoration:underline; padding:0;">Clear API Key</button>
             </div>
         </div>
         <!-- v8.0.0-auto: model 鎖定（翻譯=GEMINI_TRANSLATE_MODEL、潤稿=GEMINI_POLISH_MODEL），select 僅保留 DOM 相容 -->
@@ -745,35 +746,35 @@
             <select id="model" class="input-glass"></select>
         </div>
         <div class="setting-section">
-            <label class="section-label">翻譯記憶庫</label>
-            <div style="font-size:0.8rem; color:var(--sumi-light); margin-bottom:10px;">已啟用本地極速快取 (IndexedDB)</div>
+            <label class="section-label">Translation Memory</label>
+            <div style="font-size:0.8rem; color:var(--sumi-light); margin-bottom:10px;">Local cache is enabled (IndexedDB)</div>
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                <button onclick="TM.clear()" class="input-glass" style="width:auto; flex:0 0 auto; color:var(--aka); border-color:var(--aka); cursor:pointer;">清空記憶庫</button>
-                <span id="tmClearStatus" aria-live="polite" style="display:none; font-size:0.78rem; color:var(--kin-active); white-space:nowrap;">已清空</span>
+                <button onclick="TM.clear()" class="input-glass" style="width:auto; flex:0 0 auto; color:var(--aka); border-color:var(--aka); cursor:pointer;">Clear Memory</button>
+                <span id="tmClearStatus" aria-live="polite" style="display:none; font-size:0.78rem; color:var(--kin-active); white-space:nowrap;">Cleared</span>
             </div>
         </div>
         <div class="setting-section">
-            <label class="section-label">術語庫</label>
+            <label class="section-label">Glossary</label>
             <div class="glossary-actions">
-                <button class="glossary-action-btn" onclick="ENGINE.importGlossary()">📥 匯入</button>
-                <button class="glossary-action-btn" onclick="ENGINE.exportGlossary()">📤 匯出</button>
-                <button class="glossary-action-btn" onclick="ENGINE.clearGlossary()">🗑️ 清空</button>
+                <button class="glossary-action-btn" onclick="ENGINE.importGlossary()">📥 Import</button>
+                <button class="glossary-action-btn" onclick="ENGINE.exportGlossary()">📤 Export</button>
+                <button class="glossary-action-btn" onclick="ENGINE.clearGlossary()">🗑️ Clear</button>
             </div>
             <div class="glossary-container">
                 <div class="glossary-input-row">
-                    <input type="text" id="termSrc" placeholder="原文" onkeypress="if(event.key==='Enter')ENGINE.addGlossaryTerm()">
-                    <input type="text" id="termTgt" placeholder="譯文" onkeypress="if(event.key==='Enter')ENGINE.addGlossaryTerm()">
-                    <input type="text" id="termNote" placeholder="備註" onkeypress="if(event.key==='Enter')ENGINE.addGlossaryTerm()">
+                    <input type="text" id="termSrc" placeholder="Source" onkeypress="if(event.key==='Enter')ENGINE.addGlossaryTerm()">
+                    <input type="text" id="termTgt" placeholder="Translation" onkeypress="if(event.key==='Enter')ENGINE.addGlossaryTerm()">
+                    <input type="text" id="termNote" placeholder="Note" onkeypress="if(event.key==='Enter')ENGINE.addGlossaryTerm()">
                     <button class="btn-add" onclick="ENGINE.addGlossaryTerm()">+</button>
                 </div>
-                <div class="glossary-list" id="glossaryList"><div style="padding:16px; text-align:center; color:var(--kin); font-size:0.8rem;">尚無術語</div></div>
+                <div class="glossary-list" id="glossaryList"><div style="padding:16px; text-align:center; color:var(--kin); font-size:0.8rem;">No glossary terms yet</div></div>
             </div>
             <input type="file" id="glossaryFileInput" accept=".csv,.txt" style="display:none;" onchange="ENGINE.handleGlossaryFile(event)">
         </div>
     </div>
 </div>
 <div class="progress-overlay" id="progressOverlay">
-    <div class="progress-status" id="progressStatus">處理中</div>
+    <div class="progress-status" id="progressStatus">Processing</div>
     <div class="progress-detail" id="progressDetail"></div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar"></div></div>
     <div class="progress-text" id="progressText">INITIALIZING...</div>
@@ -783,48 +784,48 @@
 </div>
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
-        <h3 id="modalTitle">大功告成</h3>
-        <p id="modalMsg">譯文已下載，辛苦了。</p>
-        <button class="modal-btn" onclick="UI.closeModal()">確定</button>
+        <h3 id="modalTitle">All Done</h3>
+        <p id="modalMsg">Your translated file has been downloaded.</p>
+        <button class="modal-btn" onclick="UI.closeModal()">OK</button>
     </div>
 </div>
 <!-- v20.7: 使用教學 how-to guide -->
 <div class="guide-overlay" id="guideOverlay" onclick="if(event.target===this)UI.hideGuide()">
     <div class="guide-card">
-        <button class="guide-close" onclick="UI.hideGuide()" title="關閉 (Esc)">&times;</button>
-        <div class="guide-title">使用教學</div>
-        <div class="guide-subtitle" id="guideSubtitle">設定與使用</div>
+        <button class="guide-close" onclick="UI.hideGuide()" title="Close (Esc)">&times;</button>
+        <div class="guide-title">How to Use</div>
+        <div class="guide-subtitle" id="guideSubtitle">Setup and Usage</div>
         <div class="guide-page active" id="guidePage1">
             <div class="guide-step">
                 <div class="guide-num">1</div>
                 <div>
-                    <div class="guide-step-title">點右上角 ☰ 打開設定</div>
+                    <div class="guide-step-title">Open Settings from the ☰ menu</div>
                 </div>
             </div>
             <div class="guide-step">
                 <div class="guide-num">2</div>
                 <div>
-                    <div class="guide-step-title">貼上 Gemini API Key</div>
-                    <div class="guide-step-desc">沒有金鑰？<a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">免費取得 API Key ➜</a></div>
+                    <div class="guide-step-title">Enter your Gemini API Key</div>
+                    <div class="guide-step-desc">Need a key? <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Create one for free ➜</a></div>
                 </div>
             </div>
             <div class="guide-step">
                 <div class="guide-num">3</div>
                 <div>
-                    <div class="guide-step-title">上傳檔案</div>
+                    <div class="guide-step-title">Upload a File</div>
                 </div>
             </div>
             <div class="guide-step">
                 <div class="guide-num">4</div>
                 <div>
-                    <div class="guide-step-title">全自動翻譯</div>
+                    <div class="guide-step-title">Automatic Translation and Download</div>
                 </div>
             </div>
             <div class="guide-step">
                 <div class="guide-num">5</div>
                 <div>
-                    <div class="guide-step-title">需要重來？</div>
-                    <div class="guide-step-desc">按「重新翻譯」重跑一次完整流程；按「下載」可再次取回最近一次結果。</div>
+                    <div class="guide-step-title">Need to Run It Again?</div>
+                    <div class="guide-step-desc">Select “Translate Again” to rerun the full workflow, or “Download” to get the latest result again.</div>
                 </div>
             </div>
         </div>
@@ -833,12 +834,12 @@
 <script>
 const MODEL_LIST = [
     // v20.10: Keep only the two stable Gemini models requested by the user.
-    { id: 'gemini-3.1-flash-lite', name: 'Gemini 3.1 Flash-Lite（省成本）', recommended: true },
-    { id: 'gemini-3.5-flash', name: 'Gemini 3.5 Flash（高品質）' },
+    { id: 'gemini-3.1-flash-lite', name: 'Gemini 3.1 Flash-Lite (Lower Cost)', recommended: true },
+    { id: 'gemini-3.5-flash', name: 'Gemini 3.5 Flash (Higher Quality)' },
 ];
 const GEMINI_POLISH_MODEL = 'gemini-3.5-flash';
-// v8.0.1-auto: 全自動鎖定版 — 來源自動偵測、譯文英文，上傳即自動翻譯+潤稿+下載
-const APP_VERSION = '8.0.8-auto';
+// v8.1.0-auto: locked workflow — auto-detect source, translate to English, then download immediately
+const APP_VERSION = '8.1.0-auto';
 const GEMINI_TRANSLATE_MODEL = 'gemini-3.1-flash-lite';
 const LOCKED_SOURCE_LANG_CODE = 'auto';
 const LOCKED_TARGET_LANG_CODE = 'en';
@@ -892,8 +893,8 @@ const TM = {
         return new Promise(res => {
             const tx = this.db.transaction(this.storeName, 'readwrite');
             tx.objectStore(this.storeName).clear();
-            tx.oncomplete = () => { this.showClearStatus('已清空'); res(true); };
-            tx.onerror = () => { this.showClearStatus('清空失敗', false); res(false); };
+            tx.oncomplete = () => { this.showClearStatus('Cleared'); res(true); };
+            tx.onerror = () => { this.showClearStatus('Could not clear memory', false); res(false); };
         });
     }
 };
@@ -909,23 +910,23 @@ const UI = {
         if (active) {
             o.classList.add('active');
             if (typeof processed === 'number' && typeof total === 'number' && total > 0) {
-                statusEl.textContent = txt || '處理中';
+                statusEl.textContent = txt || 'Processing';
                 detailEl.textContent = `${processed} / ${total}`;
                 const pct = Math.min(100, Math.max(0, (processed / total) * 100));
                 barEl.style.width = pct + '%';
                 barEl.classList.add('processing');
-                textEl.textContent = processed === total ? '即將完成...' : '請稍候，正在處理您的文件';
+                textEl.textContent = processed === total ? 'Almost done...' : 'Please wait while your document is processed';
             } else if (typeof processed === 'number') {
-                statusEl.textContent = txt || '處理中';
+                statusEl.textContent = txt || 'Processing';
                 detailEl.textContent = '';
                 barEl.style.width = processed + '%';
                 barEl.classList.add('processing');
                 textEl.textContent = txt || '';
             } else {
-                statusEl.textContent = txt || '處理中';
+                statusEl.textContent = txt || 'Processing';
                 detailEl.textContent = '';
                 barEl.classList.add('processing');
-                textEl.textContent = '請稍候...';
+                textEl.textContent = 'Please wait...';
             }
             if (typeof FIRST_RUN !== 'undefined') FIRST_RUN.updateProgress(true, processed, total, txt);
         } else {
@@ -942,7 +943,7 @@ const UI = {
     _escHTML(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; },
     _sanitizeColor(c) { return (c && /^[0-9A-Fa-f]{3,8}$/.test(c)) ? c : null; },
     renderWithTags(t, refs) {
-        if (!t) return '<span class="empty-placeholder">等待翻譯...</span>';
+        if (!t) return '<span class="empty-placeholder">Waiting for translation...</span>';
         // v20.4: Escape entire string first to prevent XSS from text outside tags or AI hallucinations
         let escaped = this._escHTML(t);
         // Replace escaped tag markers back to styled spans
@@ -971,7 +972,7 @@ const UI = {
         return '';
     },
     getSegPreviewTitle(state) {
-        if (state === 'risk') return '高風險：此段可能保留原文，會被自動匯出擋下';
+        if (state === 'risk') return 'High risk: this segment may still contain source text and will be blocked from automatic export';
         return '';
     },
     syncSegCardState(card, s) {
@@ -999,8 +1000,8 @@ const UI = {
         else if (role === 'tableHeader') badge += '<span class="badge badge-header">Header</span>';
         if (s.meta?.groupId && document.getElementById('optSCR')?.checked) badge += `<span class="badge badge-scr">${s.meta.groupId.split('_').pop()}</span>`;
         if (s.meta?.slideId) badge += `<span class="badge" style="background:#64748b;font-size:9px;">#${s.meta.slideId.replace('slide','')}</span>`;
-        if (s.quality === 'needs_review') badge += '<span class="badge" style="background:#f59e0b;">需確認</span>';
-        if (s.quality === 'bad') badge += '<span class="badge" style="background:#dc2626;">未完成</span>';
+        if (s.quality === 'needs_review') badge += '<span class="badge" style="background:#f59e0b;">Review</span>';
+        if (s.quality === 'bad') badge += '<span class="badge" style="background:#dc2626;">Incomplete</span>';
         const state = this.getSegPreviewState(s);
         const stateClass = state ? ` seg-card-${state}` : '';
         const stateAttr = state ? ` data-review-state="${state}"` : '';
@@ -1011,7 +1012,7 @@ const UI = {
         const list = document.getElementById('previewList');
         const segs = ENGINE.segments;
         document.getElementById('segCount').textContent = segs.length;
-        if (segs.length === 0) { list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--kin);">無可顯示的內容</div>'; this._lastRenderedCount = 0; return; }
+        if (segs.length === 0) { list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--kin);">No content to display</div>'; this._lastRenderedCount = 0; return; }
         if (this._lastRenderedCount !== segs.length) {
             list.innerHTML = segs.map((s, i) => this.buildSegCardHTML(s, i)).join('');
             this._lastRenderedCount = segs.length;
@@ -1036,18 +1037,18 @@ const FIRST_RUN = {
     quipTimer: null,
     quipIndex: 0,
     progressQuips: [
-        function() { return `我正在把原文翻成${this.targetDisplayName()}，不是把人生翻成容易。`; },
-        '這句話看起來很自信，翻出來再看看。',
-        '原文剛剛說它不是故意難懂的。',
-        '我負責翻譯，你負責假裝第一次就看懂。',
-        '所有誤譯我都有不在場證明，至少目前有。',
-        '你有看過爬格子的 AI 嗎？現在有了，還會加班。',
-        '這篇如果是人寫的，那他很需要休假。',
-        '雷的呼吸，霹靂一閃，標點先斬。',
-        '我爬格子，你爬新聞，大家都在求生。',
-        '模型正在回神，它剛讀到第三個括號。',
-        '這段話的邏輯很自由，我先幫它辦入境。',
-        '請問這篇是誰寫的？我想寄一張椅子給他坐下聊。'
+        function() { return `Turning the source text into ${this.targetDisplayName()}.`; },
+        'This sentence looks confident. Let’s see how it reads in English.',
+        'The source text says it did not mean to be difficult.',
+        'I translate; you make it look effortless.',
+        'Checking the details while the model works.',
+        'Working through the document one segment at a time.',
+        'Preserving the structure while translating the words.',
+        'Punctuation first, ambiguity second.',
+        'A clear translation is on the way.',
+        'The model is thinking through another set of brackets.',
+        'Untangling a sentence with a very independent sense of logic.',
+        'Almost there—your English version is taking shape.'
     ],
     _storageScope() {
         return location.pathname || location.href || 'local';
@@ -1063,7 +1064,7 @@ const FIRST_RUN = {
         if (this.isDone()) return;
         this.active = true;
         this._bind();
-        this.go('upload');
+        this.go(this.hasKey() ? 'upload' : 'key');
         document.getElementById('firstRunOverlay')?.classList.add('active');
         document.getElementById('firstRunOverlay')?.setAttribute('aria-hidden', 'false');
     },
@@ -1092,7 +1093,7 @@ const FIRST_RUN = {
         const selectName = String(selectValue).replace(/^[\s\uD800-\uDFFF\uFE0E\uFE0F]+/, '').trim();
         if (selectName) return selectName;
         const titleName = (document.title || '').split('→').pop()?.trim();
-        return titleName || '目標語言';
+        return titleName || 'English';
     },
     setProgressQuip(index = this.quipIndex) {
         const el = document.querySelector('.first-run-progress-quip');
@@ -1116,24 +1117,25 @@ const FIRST_RUN = {
         const count = document.querySelector('.first-run-progress-count');
         if (!label) return;
         if (!active) {
-            label.textContent = '正在翻譯';
-            if (count) { count.hidden = true; count.textContent = '0 / 0 段'; }
+            label.textContent = 'Translating';
+            if (count) { count.hidden = true; count.textContent = '0 / 0'; }
             this.stopProgressQuips();
             return;
         }
         if (!this.active) return;
-        const text = txt || '翻譯中';
-        const isPolish = text.includes('潤稿');
-        const isTranslate = text.includes('翻譯');
-        label.textContent = isPolish ? '正在潤稿' : isTranslate ? '正在翻譯' : text;
+        const text = txt || 'Translating';
+        const normalized = text.toLowerCase();
+        const isPolish = normalized.includes('polish');
+        const isTranslate = normalized.includes('translat');
+        label.textContent = isPolish ? 'Polishing' : isTranslate ? 'Translating' : text;
         // v8.0.0-auto: 潤稿階段也顯示進度數（原本只認「翻譯」字樣，潤稿看起來像卡住）
-        if ((text.includes('翻譯') || text.includes('潤稿')) && typeof processed === 'number' && typeof total === 'number' && total > 0) {
-            if (count) { count.hidden = false; count.textContent = `${processed} / ${total} 段`; }
+        if ((isTranslate || isPolish) && typeof processed === 'number' && typeof total === 'number' && total > 0) {
+            if (count) { count.hidden = false; count.textContent = `${processed} / ${total}`; }
         } else {
             if (count) count.hidden = true;
         }
         const quip = document.querySelector('.first-run-progress-quip');
-        const waitingMatch = text.match(/（([^）]*等待模型回應[^）]*)）/);
+        const waitingMatch = text.match(/\(([^)]*waiting for model response[^)]*)\)/i);
         if (waitingMatch) {
             this.stopProgressQuips();
             if (quip) quip.textContent = waitingMatch[1];
@@ -1146,7 +1148,7 @@ const FIRST_RUN = {
     },
     onParsed() {
         if (!this.active) return;
-        if (!ENGINE.segments.length) { this.onError('沒有找到可翻譯的文字，請換一個檔案再試。'); return; }
+        if (!ENGINE.segments.length) { this.onError('No translatable text was found. Please try another file.'); return; }
         const stored = (document.getElementById('apiKey')?.value || '').trim();
         const input = document.getElementById('firstRunApiKey');
         if (input && stored) input.value = stored;
@@ -1159,7 +1161,7 @@ const FIRST_RUN = {
         const keyError = document.getElementById('firstRunKeyError');
         if (!v) {
             if (keyError) {
-                keyError.textContent = '請先貼上 API Key。';
+                keyError.textContent = 'Enter an API key to continue.';
                 keyError.style.display = 'block';
             }
             return;
@@ -1184,13 +1186,13 @@ const FIRST_RUN = {
             if (input && current) input.value = current;
             const keyError = document.getElementById('firstRunKeyError');
             if (keyError) {
-                keyError.textContent = 'API Key 失效、過期或無權限，請重新貼上有效 Key。';
+                keyError.textContent = 'This API key is invalid, expired, or lacks permission. Please enter a valid key.';
                 keyError.style.display = 'block';
             }
             this.go('key');
             return;
         }
-        const text = Array.isArray(msg) ? msg.join('，') : (msg || '請檢查後重新執行。');
+        const text = Array.isArray(msg) ? msg.join(', ') : (msg || 'Please check the details and try again.');
         const box = document.getElementById('firstRunErrorMsg');
         if (box) box.textContent = text;
         this.go('error');
@@ -1201,10 +1203,10 @@ const FIRST_RUN = {
         else ENGINE.runAutoPipeline();
     },
     cancelProcessing() {
-        if (ENGINE._exporting) { this.onError('正在打包輸出檔，這一步快結束了，暫時不能停止。'); return; }
+        if (ENGINE._exporting) { this.onError('The output file is being packaged and this step cannot be stopped.'); return; }
         if (ENGINE._batchRunning || ENGINE._pipelineRunning) ENGINE.stopProcessing({ silent: true });
         else ENGINE.stopRequested = true;
-        this.onError('已停止。要重新開始請按重試，或開啟設定回到完整介面。');
+        this.onError('Stopped. Select Retry to start again, or open Settings to return to the full interface.');
     },
     openSettings() {
         this.hide();
@@ -1419,7 +1421,7 @@ const ENGINE = {
             const seg = this.getSegmentById(issue.segmentId);
             if (seg) {
                 seg.quality = 'bad';
-                seg.warning = `匯出仍含原文: ${issue.path}`;
+                seg.warning = `Export still contains source text: ${issue.path}`;
             }
         }
     },
@@ -1440,7 +1442,7 @@ const ENGINE = {
             if (file) {
                 // Patch 1.1: 解析/翻譯進行中不接受換檔 — 擋在 label 更新之前，
                 // 避免「顯示 B 檔名、實際翻譯下載 A 檔」的錯檔 race
-                if (ENGINE._parsing || ENGINE._batchRunning || ENGINE._pipelineRunning) { alert('處理進行中，請等本輪完成再選檔。'); return; }
+                if (ENGINE._parsing || ENGINE._batchRunning || ENGINE._pipelineRunning) { alert('Processing is in progress. Wait for this run to finish before choosing another file.'); return; }
                 document.getElementById('fileName').textContent = file.name;
                 await new Promise(r => setTimeout(r, 100));
                 ENGINE.loadAndParse();
@@ -1898,7 +1900,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
     initModels() { document.getElementById('model').innerHTML = MODEL_LIST.map(m => `<option value="${m.id}"${m.recommended?' selected':''}>${m.name}${m.recommended?' ⭐':''}</option>`).join(''); },
     initLangs() {
         const sSel = document.getElementById('sourceLang'), tSel = document.getElementById('targetLang');
-        sSel.innerHTML = '<option value="auto">🔍 自動偵測</option>' + LANGS.map(l => `<option value="${l.name}">${l.name}</option>`).join('');
+        sSel.innerHTML = '<option value="auto">🔍 Auto-detect</option>' + LANGS.map(l => `<option value="${l.name}">${l.name}</option>`).join('');
         const stored = this.getStoredTargetLang();
         tSel.innerHTML = LANGS.map(l => `<option value="${l.name}"${l.code===stored.code?' selected':''}>${l.name}</option>`).join('');
     },
@@ -1970,10 +1972,10 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
     loadGlossaryFromStorage() { const g = this.safeJsonParse('claude_cat_glossary', []); this.glossaryItems = Array.isArray(g) ? g : []; },
     saveGlossaryToStorage() { localStorage.setItem('claude_cat_glossary', JSON.stringify(this.glossaryItems)); },
     escapeHTML(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; },
-    renderGlossary() { const list = document.getElementById('glossaryList'); if (this.glossaryItems.length === 0) { list.innerHTML = '<div style="padding:16px; text-align:center; color:var(--kin); font-size:0.8rem;">尚無術語</div>'; return; } list.innerHTML = this.glossaryItems.map((t, i) => `<div class="glossary-item"><span>${this.escapeHTML(t.src)}</span><span>${this.escapeHTML(t.tgt)}</span><span>${this.escapeHTML(t.note||'')}</span><button class="glossary-del" onclick="ENGINE.removeGlossaryTerm(${i})">×</button></div>`).join(''); },
+    renderGlossary() { const list = document.getElementById('glossaryList'); if (this.glossaryItems.length === 0) { list.innerHTML = '<div style="padding:16px; text-align:center; color:var(--kin); font-size:0.8rem;">No glossary terms yet</div>'; return; } list.innerHTML = this.glossaryItems.map((t, i) => `<div class="glossary-item"><span>${this.escapeHTML(t.src)}</span><span>${this.escapeHTML(t.tgt)}</span><span>${this.escapeHTML(t.note||'')}</span><button class="glossary-del" onclick="ENGINE.removeGlossaryTerm(${i})">×</button></div>`).join(''); },
     addGlossaryTerm() { const src = document.getElementById('termSrc').value.trim(), tgt = document.getElementById('termTgt').value.trim(), note = document.getElementById('termNote').value.trim(); if (!src || !tgt) return; this.glossaryItems.push({ src, tgt, note }); this.saveGlossaryToStorage(); this.renderGlossary(); document.getElementById('termSrc').value = ''; document.getElementById('termTgt').value = ''; document.getElementById('termNote').value = ''; },
     removeGlossaryTerm(i) { this.glossaryItems.splice(i, 1); this.saveGlossaryToStorage(); this.renderGlossary(); },
-    clearGlossary() { if (!confirm('確定清空術語庫？')) return; this.glossaryItems = []; this.saveGlossaryToStorage(); this.renderGlossary(); },
+    clearGlossary() { if (!confirm('Clear the entire glossary?')) return; this.glossaryItems = []; this.saveGlossaryToStorage(); this.renderGlossary(); },
     importGlossary() { document.getElementById('glossaryFileInput').click(); },
     // v20.3: Proper CSV parsing — tab-first detection + quoted field support
     _parseCSVLine(line) {
@@ -1992,7 +1994,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
     handleGlossaryFile(e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { ev.target.result.split('\n').forEach(line => { if (!line.trim()) return; const fields = this._parseCSVLine(line); const src = fields[0]?.trim(), tgt = fields[1]?.trim(), note = fields[2]?.trim() || ''; if (src && tgt) this.glossaryItems.push({ src, tgt, note }); }); this.saveGlossaryToStorage(); this.renderGlossary(); }; r.readAsText(f); },
     // v20.3: RFC 4180 compliant CSV export — quote fields containing comma/quote/newline
     _csvField(s) { return (s && /[,"\n\r]/.test(s)) ? '"' + s.replace(/"/g, '""') + '"' : (s || ''); },
-    exportGlossary() { if (this.glossaryItems.length === 0) return alert('無術語可匯出'); const csv = this.glossaryItems.map(t => `${this._csvField(t.src)},${this._csvField(t.tgt)},${this._csvField(t.note||'')}`).join('\n'); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'glossary.csv'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 3000); },
+    exportGlossary() { if (this.glossaryItems.length === 0) return alert('There are no glossary terms to export.'); const csv = this.glossaryItems.map(t => `${this._csvField(t.src)},${this._csvField(t.tgt)},${this._csvField(t.note||'')}`).join('\n'); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'glossary.csv'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 3000); },
     getGlossaryPromptText() { if (this.glossaryItems.length === 0) return ''; return '[Glossary]\n' + this.glossaryItems.map(t => `${t.src} → ${t.tgt}`).join('\n') + '\n'; },
     setPolishStyle(s) { this.polishStyle = s; document.querySelectorAll('.polish-style-btn').forEach(b => b.classList.toggle('active', b.dataset.style === s)); },
     // v20.1: 統一按鈕狀態管理
@@ -2119,7 +2121,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         if (this._parsing) return; // 防止重複觸發
         // Patch 1.1 (Codex P2-1 Option A): pipeline 進行中硬鎖換檔 — 不做 pendingFile queue，
         // 與「fileInput 全程鎖定」的 UX 一致；程式路徑（console/未來 drag-drop）也一併擋下
-        if (this._pipelineRunning) { alert('自動翻譯進行中，請等本輪完成再換檔。'); return; }
+        if (this._pipelineRunning) { alert('Automatic translation is in progress. Wait for this run to finish before choosing another file.'); return; }
         const f = document.getElementById('fileInput').files[0]; if (!f) { return; }
 
         // v20.1: 若正在翻譯/潤稿，先強制停止
@@ -2138,7 +2140,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
 
         // v20.1: 完整重置所有狀態
         UI.disableDownloadGlow();
-        UI.showProgress(true, 10, 100, '讀取檔案...');
+        UI.showProgress(true, 10, 100, 'Reading file...');
         UI._lastRenderedCount = 0; // 強制下次全量渲染
         this.stopRequested = false;
         this.setButtonStates('empty');
@@ -2153,17 +2155,17 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             const ext = f.name.split('.').pop().toLowerCase();
             this.fileType = ext;
             if (['pptx', 'docx', 'xlsx'].includes(ext)) {
-                UI.showProgress(true, 20, 100, '解壓縮...');
+                UI.showProgress(true, 20, 100, 'Opening archive...');
                 this.zip = await JSZip.loadAsync(f);
-                UI.showProgress(true, 40, 100, '解析結構...');
+                UI.showProgress(true, 40, 100, 'Parsing document structure...');
                 if (this.fileType === 'pptx') await this.parsePPTX();
                 else if (this.fileType === 'docx') await this.parseDOCX();
                 else if (this.fileType === 'xlsx') await this.parseXLSX();
             } else if (ext === 'txt') {
                 await this.parseTXT(f);
-            } else { throw new Error("不支援的格式: " + this.fileType); }
+            } else { throw new Error("Unsupported file format: " + this.fileType); }
             if (document.getElementById('optSCR')?.checked && this.fileType === 'pptx') {
-                UI.showProgress(true, 90, 100, '語意重組中...');
+                UI.showProgress(true, 90, 100, 'Reconstructing content...');
                 this.segments = this.scr.reconstructContext(this.segments);
             }
             UI.showProgress(false); UI.render();
@@ -2181,8 +2183,8 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             else if (this.segments.length && (document.getElementById('apiKey')?.value || '').trim()) this.runAutoPipeline();
         } catch (e) {
             console.error(e); UI.showProgress(false);
-            if (FIRST_RUN.active) FIRST_RUN.onError(`解析錯誤: ${e.message}`);
-            else alert(`解析錯誤: ${e.message}`);
+            if (FIRST_RUN.active) FIRST_RUN.onError(`Could not parse the file: ${e.message}`);
+            else alert(`Could not parse the file: ${e.message}`);
         }
         finally {
             this._parsing = false;
@@ -3047,7 +3049,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         const softened = fixed.map(i => {
             if (typeof i?.target === 'string' && this.containsForbiddenScriptResidue(i.target)) {
                 residueCount++;
-                return { ...i, quality: 'needs_review', warning: '譯文含來源文字殘留（可能為專名）' };
+                return { ...i, quality: 'needs_review', warning: 'The translation contains source text that may be a proper noun' };
             }
             return { ...i, quality: i.quality || 'exact' };
         });
@@ -3181,7 +3183,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
                     const preserved = (modelItem?.target || leaf?.target || '').trim();
                     if (preserved) {
                         console.warn(`[QG fallback] preserve residue leaf id=${leaf?.id}: ${err.message}`);
-                        return [{ id: leaf?.id, target: modelItem?.target || leaf?.target, quality: 'needs_review', warning: '譯文含來源文字殘留（可能為專名）', _failed: true, error: err.message || 'Translation failed validation' }];
+                        return [{ id: leaf?.id, target: modelItem?.target || leaf?.target, quality: 'needs_review', warning: 'The translation contains source text that may be a proper noun', _failed: true, error: err.message || 'Translation failed validation' }];
                     }
                 }
                 console.warn(`[QG fallback] mark bad leaf id=${leaf?.id}: ${err.message}`);
@@ -3237,19 +3239,21 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             const downloaded = await this._autoDownloadTranslated();
             if (FIRST_RUN.active) {
                 if (downloaded) FIRST_RUN.onComplete();
-                else FIRST_RUN.onError('下載失敗，請按下載重試。');
+                else FIRST_RUN.onError(this._lastAutoDownloadError || 'The download did not complete. Select Download to try again.');
+            } else if (!downloaded) {
+                UI.showModal('Download Not Completed', `<small style="color:#ef4444;">${this._lastAutoDownloadError || 'Select “Download” to try again.'}</small>`);
             }
             return;
         }
         const parts = [];
-        if (missing.length) parts.push(`${missing.length} 段尚未產生譯文`);
-        if (errorCount) parts.push(`${errorCount} 個批次失敗`);
-        if (this._authErrorSeen) parts.push('API Key 失效、過期或無權限');
+        if (missing.length) parts.push(`${missing.length} segments have no translation`);
+        if (errorCount) parts.push(`${errorCount} batches failed`);
+        if (this._authErrorSeen) parts.push('The API key is invalid, expired, or lacks permission');
         if (FIRST_RUN.active) {
-            FIRST_RUN.onError(`${parts.join('，')}。請檢查後重新執行。`);
+            FIRST_RUN.onError(`${parts.join(', ')}. Please check the details and try again.`);
             return;
         }
-        UI.showModal(`${label}未完成`, `<small style="color:#ef4444;">${parts.join('，')}。請檢查後重新執行。</small>`);
+        UI.showModal(`${label} Not Completed`, `<small style="color:#ef4444;">${parts.join(', ')}. Please check the details and try again.</small>`);
     },
     _batchRunning: false,
     // v8.0.0-auto: 結構化 verdict — pipeline 靠回傳值分支，不靠會被下一 leg reset 的 side-effect flag
@@ -3266,8 +3270,8 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
     // opts.fromPipeline=true → 讓 pipeline 自己的 leg 通過 _pipelineRunning guard
     async runBatchProcess(mode, opts = {}) {
         const autoDownload = opts.autoDownload !== false;
-        if (this._batchRunning || (this._pipelineRunning && !opts.fromPipeline)) { alert('翻譯正在進行中，請稍候'); return { ok: false, stale: false, stopped: false, authError: false, missing: 0, errorCount: 0, busy: true }; }
-        const apiKey = document.getElementById('apiKey').value.trim(); if (!apiKey) { alert("請先輸入 API Key"); return { ok: false, stale: false, stopped: false, authError: true, missing: 0, errorCount: 0 }; }
+        if (this._batchRunning || (this._pipelineRunning && !opts.fromPipeline)) { alert('Translation is already in progress. Please wait.'); return { ok: false, stale: false, stopped: false, authError: false, missing: 0, errorCount: 0, busy: true }; }
+        const apiKey = document.getElementById('apiKey').value.trim(); if (!apiKey) { alert("Enter your API key first."); return { ok: false, stale: false, stopped: false, authError: true, missing: 0, errorCount: 0 }; }
         this._batchRunning = true;
         this._abortController = new AbortController();
         this.saveKey(); this.stopRequested = false; this._authErrorSeen = false;
@@ -3286,18 +3290,18 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             this.setButtonStates('ready');
             if (!autoDownload) return this._runVerdict(myGen); // v8.0.0-auto: pipeline 模式不下載、不 alert
             if (FIRST_RUN.active && mode === 'translate') {
-                await this._finishAndAutoDownload('翻譯');
+                await this._finishAndAutoDownload('Translation');
                 return this._runVerdict(myGen);
             }
-            alert(mode === 'translate' ? "無需翻譯" : "請先翻譯");
+            alert(mode === 'translate' ? "There is nothing to translate." : "Translate the file first.");
             return this._runVerdict(myGen);
         }
-        const modeLabel = mode === 'translate' ? "翻譯中" : "潤稿中";
+        const modeLabel = mode === 'translate' ? "Translating" : "Polishing";
         UI.showProgress(true, 0, todos.length, modeLabel);
         UI.disableDownloadGlow();
         let tmHit = 0;
         if (mode === 'translate') {
-            UI.showProgress(true, 0, todos.length, '檢查記憶庫...');
+            UI.showProgress(true, 0, todos.length, 'Checking translation memory...');
             const { hits, misses } = await this.tmPrefetch(todos, srcC, tmTgtKey);
             tmHit = hits.length;
             hits.forEach(s => this.uiUpdateQueue.push(s.id));
@@ -3309,7 +3313,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             this.setButtonStates('ready');
             UI.showProgress(false);
             UI.render();
-            if (autoDownload) await this._finishAndAutoDownload('翻譯'); // v8.0.0-auto: pipeline 模式抑制
+            if (autoDownload) await this._finishAndAutoDownload('Translation'); // v8.0.0-auto: pipeline mode suppresses this path
             return this._runVerdict(myGen);
         }
         const uMap = this.deduplicateSegments(todos); let uSegs = Array.from(uMap.values()).map(g => g.representative);
@@ -3318,7 +3322,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         const tasks = batches.map((batch, bi) => async () => {
             if (this.stopRequested || this._runGeneration !== myGen) return;
             dispatchedBatches++;
-            if (processed === 0) UI.showProgress(true, 0, total, `${modeLabel}（已送出 ${dispatchedBatches}/${batches.length} 批，等待模型回應）`);
+            if (processed === 0) UI.showProgress(true, 0, total, `${modeLabel} (${dispatchedBatches}/${batches.length} batches sent, waiting for model response)`);
             try {
                 const dataRes = await this.callBatchWithFallback(apiKey, mode, style, batch, model, srcC, tgtC, glossary);
                 if (Array.isArray(dataRes)) {
@@ -3337,7 +3341,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
                             continue;
                         }
                         if (r.error) s.warning = r.error;
-                        else if (r._failed && !s.warning) s.warning = '翻譯未完成，需人工檢查';
+                        else if (r._failed && !s.warning) s.warning = 'Translation incomplete; manual review required';
                         if (mode === 'translate' && hasTarget && this.isCacheableTranslation(s, r.target, s.quality)) TM.set(s.source, r.target, srcC, tmTgtKey);
                         this.uiUpdateQueue.push(s.id);
                     }
@@ -3366,104 +3370,76 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             this.setButtonStates('ready');
         }
         if (autoDownload && !this.stopRequested && this._runGeneration === myGen) {
-            await this._finishAndAutoDownload(mode === 'translate' ? '翻譯' : '潤稿');
+            await this._finishAndAutoDownload(mode === 'translate' ? 'Translation' : 'Polishing');
         }
         return this._runVerdict(myGen);
     },
     flushUIUpdates() { if (this.uiUpdateQueue.length === 0) return; requestAnimationFrame(() => { const q = this.uiUpdateQueue.splice(0); for (const id of q) { const s = this.getSegmentById(id); if (s) { const el = document.querySelector(`[data-seg-id="${id}"] .seg-tgt`); if (el) { el.innerHTML = UI.renderWithTags(s.target, s.refs); const card = el.closest('.seg-card'); if (card) { UI.syncSegCardState(card, s); card.classList.add('flash'); } } } } }); },
     // v20.1: 安全停止 — abort 飛行中的 fetch，等 promise settle 後才釋放
-    stopProcessing() {
+    stopProcessing({ silent = false } = {}) {
         if (!this._batchRunning && !this._pipelineRunning) return; // v8.0.0-auto: pipeline 兩段間也可停
-        if (this._exporting) { alert('正在打包輸出檔，此階段無法中斷。'); return; } // Patch 1.1: 不謊報已停止
+        if (this._exporting) { alert('The output file is being packaged and cannot be stopped at this stage.'); return; } // Patch 1.1: do not claim it stopped
         this.stopRequested = true;
         if (this._abortController) this._abortController.abort(); // 不 null，讓 retry 路徑讀到 aborted signal
         // 注意：不立即設 _batchRunning = false，由 runBatchProcess/runMultiCyclePolish 結束時釋放
         UI.showProgress(false);
         this.setButtonStates('ready'); // v20.5: 立即恢復按鈕，finally 會再呼叫一次（冪等）
-        alert('已停止');
+        if (!silent) alert('Stopped.');
     },
     translate() { return this.runBatchProcess('translate'); },
-    // ===== v8.0.0-auto: 全自動 pipeline（翻譯 flash-lite → 潤稿 3.5-flash → 單次下載）=====
+    // ===== v8.1.0-auto: automatic pipeline (translate with flash-lite, then download once) =====
     _pipelineRunning: false,
     _exporting: false, // Patch 1.1: 打包/下載階段（generateAsync 無 abort 點，Stop 需誠實告知）
     _lastAutoDownloadError: null,
     _reportPipelineFailure(v, label) {
         const parts = [];
-        if (v?.missing) parts.push(`${v.missing} 段尚未產生譯文`);
-        if (v?.errorCount) parts.push(`${v.errorCount} 個批次失敗`);
-        if (v?.authError) parts.push('API Key 失效、過期或無權限');
-        const msg = `${parts.join('，') || label + '未完成'}。請檢查後重新執行。`;
+        if (v?.missing) parts.push(`${v.missing} segments have no translation`);
+        if (v?.errorCount) parts.push(`${v.errorCount} batches failed`);
+        if (v?.authError) parts.push('The API key is invalid, expired, or lacks permission');
+        const msg = `${parts.join(', ') || label + ' was not completed'}. Please check the details and try again.`;
         if (FIRST_RUN.active) { FIRST_RUN.onError(msg); return; }
-        UI.showModal(`${label}未完成`, `<small style="color:#ef4444;">${msg}</small>`);
+        UI.showModal(`${label} Not Completed`, `<small style="color:#ef4444;">${msg}</small>`);
     },
     // v8.0.0-auto: 手動「重新翻譯」= 清空既有譯文後重跑完整 pipeline（TM 快取讓重譯快速省額度）。
     // wizard 的 retry() 仍走 runAutoPipeline（resume 語意：只補漏段、不清空成功段）。
     rerunFullPipeline() {
-        if (this._pipelineRunning || this._batchRunning) { alert('處理正在進行中，請稍候'); return; }
-        if (!this.segments.length) { alert('請先選擇檔案'); return; }
+        if (this._pipelineRunning || this._batchRunning) { alert('Processing is already in progress. Please wait.'); return; }
+        if (!this.segments.length) { alert('Choose a file first.'); return; }
         this.segments.forEach(s => { s.target = ''; s.quality = 'todo'; delete s.warning; });
         UI.render();
         return this.runAutoPipeline();
     },
     async runAutoPipeline() {
-        if (this._pipelineRunning || this._batchRunning) { alert('處理正在進行中，請稍候'); return; }
+        if (this._pipelineRunning || this._batchRunning) { alert('Processing is already in progress. Please wait.'); return; }
         if (!this.segments.length) { if (FIRST_RUN.active) FIRST_RUN.go('upload'); return; }
-        if (!(document.getElementById('apiKey')?.value || '').trim()) { if (FIRST_RUN.active) FIRST_RUN.go('key'); else alert('請先輸入 API Key'); return; }
+        if (!(document.getElementById('apiKey')?.value || '').trim()) { if (FIRST_RUN.active) FIRST_RUN.go('key'); else alert('Enter your API key first.'); return; }
         this._pipelineRunning = true;
         const myGen = this._runGeneration; // 捕捉世代：re-upload 會 ++，本 pipeline 即 stale 靜默退出
         try {
-            if (FIRST_RUN.active) { FIRST_RUN.updateProgress(true, null, null, '翻譯中'); FIRST_RUN.go('progress'); }
+            if (FIRST_RUN.active) { FIRST_RUN.updateProgress(true, null, null, 'Translating'); FIRST_RUN.go('progress'); }
             // Leg 1: 翻譯（抑制內部下載與 alert）
             const tv = await this.runBatchProcess('translate', { autoDownload: false, fromPipeline: true });
             if (!tv || tv.stale || this._runGeneration !== myGen) return; // 新上傳接手
-            if (tv.stopped) return; // 使用者停止：保留現狀，不潤稿不下載
-            if (!tv.ok) { this._reportPipelineFailure(tv, '翻譯'); return; }
-            // Leg 2: 潤稿。QG 失敗的批次會把 s.target 清空（3151-3153 行為），
-            // 先快照翻譯結果，潤稿後還原被清空的段 → 「潤稿失敗仍可下載翻譯版」
-            const prePolish = new Map();
-            for (const s of this.segments) if ((s.target || '').trim()) prePolish.set(s.id, s.target);
-            if (this.stopRequested) return; // inter-leg 停止防呆（polish 進場會 reset stopRequested）
-            if (FIRST_RUN.active) FIRST_RUN.updateProgress(true, null, null, '潤稿中');
-            const pv = await this.runBatchProcess('polish', { autoDownload: false, fromPipeline: true });
-            if (!pv || pv.stale || this._runGeneration !== myGen) return; // stale：segments 已被新檔取代，不可還原
-            // v8.0.0-auto fix: 還原必須在 stopped 檢查【之前】— 潤稿中按停止時，
-            // QG 已清空的段若不先還原就 return，已完成的翻譯會永久遺失
-            let restored = 0;
-            for (const s of this.segments) {
-                if (!(s.target || '').trim() && prePolish.has(s.id)) {
-                    s.target = prePolish.get(s.id);
-                    s.quality = 'needs_review';
-                    if (!s.warning) s.warning = '潤稿未完成，沿用翻譯版';
-                    restored++;
-                }
-            }
-            if (restored) UI.render();
-            if (pv.stopped) return; // 使用者停止：翻譯已還原保留，不下載
-            const polishIssues = !pv.ok || restored > 0;
+            if (tv.stopped) return; // user stopped: keep current results and do not download
+            if (!tv.ok) { this._reportPipelineFailure(tv, 'Translation'); return; }
             if (this.stopRequested || this._runGeneration !== myGen) return; // 下載前最後防線
             // 單一出口：下載一次（auto gate 走 getAutoExportVerdict，含 TXT 保護）
-            let downloaded;
-            this._exporting = true; // Patch 1.1: 打包期間 Stop 改顯示「無法中斷」而非謊報已停止
-            try { downloaded = await this._autoDownloadTranslated(); }
-            finally { this._exporting = false; }
+            const downloaded = await this._autoDownloadTranslated();
             if (FIRST_RUN.active) {
                 if (downloaded) FIRST_RUN.onComplete();
                 else {
-                    // 下載失敗非 auth 問題；清掉潤稿殘留的 auth flag，避免 onError 誤路由到 key 頁蓋掉真正原因
-                    if (!pv.authError) this._authErrorSeen = false;
-                    FIRST_RUN.onError(this._lastAutoDownloadError || '下載失敗，請按下載重試。');
+                    this._authErrorSeen = false;
+                    FIRST_RUN.onError(this._lastAutoDownloadError || 'The download did not complete. Select Download to try again.');
                 }
             }
             if (downloaded) {
                 const ev = this.getAutoExportVerdict();
                 const notes = [];
-                if (pv.authError) notes.push('API Key 失效或無權限使用潤稿模型（gemini-3.5-flash），本次未潤稿');
-                if (polishIssues) notes.push(`潤稿未全部完成（${pv.errorCount || restored} 批次/段），該部分沿用翻譯版`);
-                if (ev.softReview) notes.push(`${ev.softReview} 段標記需人工確認，建議抽查`);
+                if (ev.softReview) notes.push(`${ev.softReview} segments are marked for manual review`);
                 // wizard done 卡與 modal 同層（z-index 3000），等 wizard 收起後再顯示提醒
-                if (notes.length) setTimeout(() => UI.showModal('完成（含提醒）', `<small>${notes.join('；')}。</small>`), FIRST_RUN.active ? 2400 : 0);
+                if (notes.length) setTimeout(() => UI.showModal('Completed with a Note', `<small>${notes.join('; ')}.</small>`), FIRST_RUN.active ? 2400 : 0);
             } else if (!FIRST_RUN.active) {
-                UI.showModal('下載未完成', `<small style="color:#ef4444;">${this._lastAutoDownloadError || '請按「下載」重試。'}</small>`);
+                UI.showModal('Download Not Completed', `<small style="color:#ef4444;">${this._lastAutoDownloadError || 'Select “Download” to try again.'}</small>`);
             }
         } finally {
             this._pipelineRunning = false;
@@ -3481,7 +3457,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
     },
     // v20: Multi-cycle polish process with batch processing and context awareness
     async runMultiCyclePolish() {
-        if (this._batchRunning || this._pipelineRunning) { alert('處理正在進行中，請稍候'); return; } // v8.0.0-auto: 補齊 pipeline guard
+        if (this._batchRunning || this._pipelineRunning) { alert('Processing is already in progress. Please wait.'); return; } // v8.0.0-auto: pipeline guard
         
         const apiType = document.getElementById('polishApi')?.value || 'gemini';
         let apiKey, polishModel;
@@ -3489,12 +3465,12 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         if (apiType === 'claude') {
             apiKey = document.getElementById('claudeApiKey')?.value?.trim();
             polishModel = document.getElementById('claudeModel')?.value || 'claude-sonnet-4-6';
-            if (!apiKey) { alert('請輸入 Claude API Key'); return; }
+            if (!apiKey) { alert('Enter your Claude API key first.'); return; }
             this.saveClaudeKey(); // v20.6: persist at run entry (symmetry with translate path saveKey)
         } else {
             apiKey = document.getElementById('apiKey').value.trim();
             polishModel = GEMINI_POLISH_MODEL;
-            if (!apiKey) { alert('請輸入 Gemini API Key'); return; }
+            if (!apiKey) { alert('Enter your Gemini API key first.'); return; }
             this.saveKey(); // v20.6: persist at run entry (symmetry with translate path)
         }
         
@@ -3512,7 +3488,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         const style = this.polishStyle || 'standard';
         
         let todos = this.segments.filter(s => s.target?.trim());
-        if (todos.length === 0) { alert('請先翻譯'); return; }
+        if (todos.length === 0) { alert('Translate the file first.'); return; }
         
         // Deduplicate
         const uMap = this.deduplicateSegments(todos);
@@ -3533,13 +3509,13 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         const totalSteps = totalBatches * cycles * 2; // cycles × 2 stages
         let currentStep = 0;
         
-        UI.showProgress(true, 0, totalSteps, `多循環潤稿準備中...`);
+        UI.showProgress(true, 0, totalSteps, `Preparing multi-cycle polishing...`);
         UI.disableDownloadGlow();
         this.uiUpdateQueue = [];
         this.stats.errors = [];
         
         const apiLabel = apiType === 'claude' ? 'Claude' : 'Gemini';
-        const contentLabel = contentType === 'poster' ? '海報模式' : '文章模式';
+        const contentLabel = contentType === 'poster' ? 'Poster Mode' : 'Article Mode';
         console.log(`[v20] Starting multi-cycle polish: ${cycles} cycles, ${batches.length} batches, ${contentLabel}, API: ${apiLabel}`);
         
         // 處理每個循環
@@ -3549,14 +3525,14 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             for (let stage = 1; stage <= 2; stage++) {
                 if (this.stopRequested || this._runGeneration !== myGen) break;
                 
-                const stageName = stage === 1 ? '準確檢查' : '在地潤飾';
+                const stageName = stage === 1 ? 'Accuracy Review' : 'Localization';
 
                 // v20.2: Parallel batch pool within each cycle-stage (LIMIT=3)
                 const PARALLEL_LIMIT = apiType === 'claude' ? 2 : 3;
                 const batchTasks = batches.map((batch, bi) => async () => {
                     if (this.stopRequested || this._runGeneration !== myGen) return;
                     UI.showProgress(true, currentStep, totalSteps,
-                        `[${cycle}/${cycles}輪] ${stageName}`);
+                        `[Cycle ${cycle}/${cycles}] ${stageName}`);
 
                     const context = this.buildBatchContext(bi, batches, contentType);
                     try {
@@ -3567,7 +3543,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
                         // v20.4: Increment after completion, not before — accurate progress
                         currentStep++;
                         UI.showProgress(true, currentStep, totalSteps,
-                            `[${cycle}/${cycles}輪] ${stageName} (${currentStep}/${totalSteps})`);
+                            `[Cycle ${cycle}/${cycles}] ${stageName} (${currentStep}/${totalSteps})`);
                         for (const s of batch) this.uiUpdateQueue.push(s.id);
                         this.flushUIUpdates();
                         console.log(`[v20] C${cycle}S${stage} Batch ${bi + 1}: ${updated}/${batch.length} updated`);
@@ -3598,7 +3574,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
 
         if (this._runGeneration !== myGen) { return; }
         if (!this.stopRequested) {
-            await this._finishAndAutoDownload('潤稿');
+            await this._finishAndAutoDownload('Polishing');
         }
         } finally {
             if (this._runGeneration === myGen) {
@@ -3610,6 +3586,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
     },
     // Download
     async _autoDownloadTranslated() {
+        this._exporting = true;
         try {
             this._lastAutoDownloadError = null; // v8.0.0-auto: 保留失敗原因供 pipeline 顯示
             await this.download('translated');
@@ -3619,10 +3596,12 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             this._lastAutoDownloadError = err?.message || String(err);
             UI.enableDownloadGlow();
             return false;
+        } finally {
+            this._exporting = false;
         }
     },
     async download(modeOverride = null) {
-        UI.showProgress(true, 0, 100, '打包檔案...');
+        UI.showProgress(true, 0, 100, 'Packaging file...');
         UI.disableDownloadGlow();
         const dlMode = modeOverride || document.querySelector('input[name="downloadMode"]:checked')?.value || 'translated';
         const isAutoDownload = !!modeOverride;
@@ -3634,11 +3613,7 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         if (this.originalFileName) {
             const ld = this.originalFileName.lastIndexOf('.'), base = ld !== -1 ? this.originalFileName.substring(0, ld) : this.originalFileName, ext = ld !== -1 ? this.originalFileName.substring(ld) : '';
             if (dlMode === 'translated') {
-                const titleMatch = (document.title || '').match(/→\s*(.+)$/);
-                const rawTargetLabel = titleMatch ? titleMatch[1].trim() : (tgtLangName || '').trim();
-                const targetLabel = rawTargetLabel === 'English' ? '英文' : rawTargetLabel;
-                const translatedSuffix = targetLabel === '正體中文' ? '中文譯文版' : `${targetLabel}譯文版`;
-                newName = `${base}(${translatedSuffix})${ext}`;
+                newName = `${base}(English)${ext}`;
             } else {
                 newName = `${base}_${langCode}${modeSuffix}_v${APP_VERSION}${ext}`;
             }
@@ -3651,20 +3626,20 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
                 const v = this.getAutoExportVerdict();
                 if (v.hardFail) {
                     const parts = [];
-                    if (v.missing) parts.push(`${v.missing} 段缺譯文`);
-                    if (v.bad) parts.push(`${v.bad} 段品質不佳`);
-                    if (v.highRisk) parts.push(`${v.highRisk} 段高風險原文殘留`);
+                    if (v.missing) parts.push(`${v.missing} segments have no translation`);
+                    if (v.bad) parts.push(`${v.bad} segments failed quality checks`);
+                    if (v.highRisk) parts.push(`${v.highRisk} segments may still contain source text`);
                     UI.showProgress(false);
-                    throw new Error(`${parts.join('、')}，已暫停自動下載。`);
+                    throw new Error(`${parts.join(', ')}. Automatic download was paused.`);
                 }
             } else {
                 const incomplete = this._incompleteTranslatedSegments();
                 if (incomplete.length) {
-                    const msg = `${incomplete.length} 段翻譯尚未完成或需人工確認，匯出時可能保留原文。`;
+                    const msg = `${incomplete.length} translations are incomplete or need manual review. The export may still contain source text.`;
                     UI.showProgress(false);
                     const sample = incomplete.slice(0, 5).map(s => `#${s.id + 1} ${this.plainTextForCompare(s.source).slice(0, 120)}`).join('\n');
-                    if (!confirm(`${msg}\n\n${sample}\n\n仍要下載？`)) throw new Error(msg);
-                    UI.showProgress(true, 5, 100, '打包檔案...');
+                    if (!confirm(`${msg}\n\n${sample}\n\nDownload anyway?`)) throw new Error(msg);
+                    UI.showProgress(true, 5, 100, 'Packaging file...');
                 }
             }
         }
@@ -3672,10 +3647,9 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         if (this.fileType === 'txt') {
             let c;
             if (dlMode === 'original') c = this.segments.map(s => this.stripTags(s.source)).join('\n');
-            else if (dlMode === 'bilingual') c = this.segments.map(s => `[原] ${this.stripTags(s.source)}\n[譯] ${this.stripTags(s.target||s.source)}`).join('\n\n');
+            else if (dlMode === 'bilingual') c = this.segments.map(s => `[Source] ${this.stripTags(s.source)}\n[Translation] ${this.stripTags(s.target||s.source)}`).join('\n\n');
             else c = this.segments.map(s => s.target || s.source).join('\n');
-            const footer = dlMode === 'original' ? '' : '\n\n--- 菜單翻譯 ---';
-            const blob = new Blob([c + footer], { type: "text/plain;charset=utf-8" });
+            const blob = new Blob([c], { type: "text/plain;charset=utf-8" });
             const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = newName; a.click();
             setTimeout(() => URL.revokeObjectURL(a.href), 3000);
             UI.showProgress(false); return;
@@ -3684,10 +3658,10 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         if (dlMode === 'original') { const blob = this._originalFileBlob || await this.zip.generateAsync({ type: "blob" }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = newName.replace('_original', ''); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 3000); UI.showProgress(false); return; }
         // v20.5: Export isolation — build cloned DOMs, all writes go to clones
         this.stats = { totalSegments: this.segments.length, translatedSegments: 0, skippedSegments: 0, restoredTags: 0, hopeStats: { safe: 0, shrink: 0, clip: 0 }, chartStats: { titles: 0, axes: 0, legends: 0, categories: 0, dataLabels: 0 }, smartartStats: { nodes: 0 }, errors: [] };
-        UI.showProgress(true, 20, 100, '準備匯出...');
+        UI.showProgress(true, 20, 100, 'Preparing export...');
         const { cloneDocs, exportSegs } = this._buildExportContext();
         if (useHOPE && this.fileType === 'pptx') {
-            UI.showProgress(true, 30, 100, '套用 HOPE...');
+            UI.showProgress(true, 30, 100, 'Applying HOPE...');
             const cellMap = new Map();
             exportSegs.forEach(s => { if (s.meta?.containerType === 'table' && s.meta?.cellKey) { const k = s.meta.cellKey; if (!cellMap.has(k)) cellMap.set(k, []); cellMap.get(k).push(s); } });
             for (const [k, cSegs] of cellMap) { const cd = this.table.aggregateCellDensity(cSegs, tgtLangName); if (cd) { const st = this.table.applyHOPE(cd); this.stats.hopeStats[st]++; } }
@@ -3719,9 +3693,9 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
         // 涵蓋 1 字段（zip scan ≥2 門檻抓不到）與非漢字 source 的 writer 失敗
         if (isAutoDownload && this.stats.errors.length) {
             UI.showProgress(false);
-            throw new Error(`${this.stats.errors.length} 段匯出寫入失敗（原文可能殘留），已暫停自動下載。`);
+            throw new Error(`${this.stats.errors.length} segments could not be written to the export and may still contain source text. Automatic download was paused.`);
         }
-        UI.showProgress(true, 80, 100, '重建檔案...');
+        UI.showProgress(true, 80, 100, 'Rebuilding file...');
         // v20.4: Export to a cloned zip — never mutate this.zip so subsequent downloads stay correct
         const exportZip = await JSZip.loadAsync(await this.zip.generateAsync({ type: 'arraybuffer' }));
         for (const [path, doc] of Object.entries(cloneDocs)) { let xml = new XMLSerializer().serializeToString(doc); if (!xml.startsWith('<?xml')) xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' + xml; exportZip.file(path, xml); }
@@ -3730,15 +3704,15 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
             if (qaIssues.length > 0) {
                 this.applyQaIssues(qaIssues);
                 UI.render();
-                const msg = `偵測到 ${qaIssues.length} 段高風險原文仍在輸出檔中。`;
+                const msg = `${qaIssues.length} high-risk segments may still contain source text in the output file.`;
                 UI.showProgress(false);
                 if (isAutoDownload) throw new Error(msg);
                 const sample = qaIssues.slice(0, 5).map(i => `#${i.segmentId + 1} ${i.path}: ${i.source}`).join('\n');
-                if (!confirm(`${msg}\n\n這些段落可能仍是原文，建議取消後重新翻譯。\n\n${sample}\n\n仍要下載？`)) throw new Error(msg);
-                UI.showProgress(true, 95, 100, '產生下載...');
+                if (!confirm(`${msg}\n\nCancel and translate these segments again before downloading.\n\n${sample}\n\nDownload anyway?`)) throw new Error(msg);
+                UI.showProgress(true, 95, 100, 'Preparing download...');
             }
         }
-        UI.showProgress(true, 95, 100, '產生下載...');
+        UI.showProgress(true, 95, 100, 'Preparing download...');
         const blob = await exportZip.generateAsync({ type: "blob" }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = newName; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 3000);
         UI.showProgress(false);
     },
@@ -4073,11 +4047,11 @@ JSON 陣列：[{"id": 段落編號, "original": "含標籤原文", "current": "�
 };
 document.addEventListener('DOMContentLoaded', () => {
     ENGINE.init();
-    console.log('任何語言 → English v' + APP_VERSION);
-    console.log('   ├─ NEW: Auto pipeline (上傳→翻譯→潤稿→下載，零操作)');
-    console.log('   ├─ NEW: Batch multi-cycle polish (批次多循環潤稿)');
-    console.log('   ├─ NEW: Context-aware processing (上下文參考)');
-    console.log('   ├─ NEW: Content type detection (海報/文章自動偵測)');
+    console.log('Any Language → English v' + APP_VERSION);
+    console.log('   ├─ Auto pipeline (upload → translate → download)');
+    console.log('   ├─ Batch multi-cycle polish helpers retained but not used automatically');
+    console.log('   ├─ Context-aware processing');
+    console.log('   ├─ Automatic content type detection');
     console.log('   ├─ NEW: Claude/Gemini API support');
     console.log('   ├─ Chart: Title/Axis/Legend/Category/DataLabel');
     console.log('   ├─ SmartArt: Node text extraction');
